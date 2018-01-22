@@ -2,7 +2,7 @@
 
 #
 #     Listing of your AWS EC2 instances.
-# App require boto3 AWS-API module, make sure it is installed by running 'sudo pip3 install boto3'
+# App requires boto3 AWS-API module, make sure it is installed by running 'sudo pip3 install boto3'
 # If no args specified app lists your EC2 instances using .aws/config "Default" profile and region. Use ./ec2top.py --help for possible options
 #
 
