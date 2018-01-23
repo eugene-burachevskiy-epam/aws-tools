@@ -6,7 +6,7 @@
 # You can change output to pprinted dictionary. Use --help for details.
 #   
 
-import yaml, subprocess, pprint, time, argparse
+import yaml, subprocess, pprint, argparse
 
 
 parser = argparse.ArgumentParser(description='Listing of your account Amazon Machine Images')
