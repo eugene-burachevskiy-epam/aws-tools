@@ -12,7 +12,7 @@ Example:
 
     newuser@vbox:~$ ec2runner.py stop -p default -r us-east-1 i-007f29708864cc40b
     Response code: 200
-    Instance:i-007f29708864cc40b stopped => stopped
+    Instance:i-007f29708864cc40b running => stopping
 
 
 ----------
