@@ -38,6 +38,8 @@ Example:
 
 ec2top.py - listing of your EC2 machines
 
+Example:
+
     newuser@vbox:~$ ec2top -r us-east-1 --sort Type
     i-9262c07c          stopped    c3.large  54.84.57.91     10.155.4.105    vpc-8e9861e2   db2012-compute-01
     i-0f4e12fe047c8968b running    c3.large  54.165.160.131  10.155.4.98     vpc-8e9861e2   dev-auto-s3-compute101
