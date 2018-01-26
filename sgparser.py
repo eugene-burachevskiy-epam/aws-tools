@@ -39,7 +39,7 @@ for i in range(len(input['SecurityGroups'])):
     item = []
     item.append(input['SecurityGroups'][i]['GroupId'])
     item.append(input['SecurityGroups'][i]['GroupName'])
-    item.append(input['SecurityGroups'][i]['Description'])
+    item.append(input['SecurityGroups'][i]['Description'].replace(',', ' and '))
     for f in input['SecurityGroups'][i]['IpPermissions']:
 
         for r in f['IpRanges']:
