@@ -6,6 +6,20 @@ Shell utilities for AWS operations written on Python.
 ----------
 
 
+ec2top.py - listing of your EC2 machines
+
+    newuser@vbox:~$ ec2top --sort Type
+    i-9262c07c          stopped    c3.large  54.84.57.91     10.155.4.105    vpc-8e9861e2   db2012-compute-01
+    i-0f4e12fe047c8968b running    c3.large  54.165.160.131  10.155.4.98     vpc-8e9861e2   dev-auto-s3-compute101
+    i-0b545c4b945aa6183 running    c3.large  54.236.202.212  10.155.2.199    vpc-8e9861e2   dev-compute-01
+    i-0ce03d96ac577bba0 running    c3.large  34.192.41.156   10.155.2.241    vpc-8e9861e2   dev-compute-01-phx
+    i-0401332de32993d1e running    c3.large  54.172.49.236   10.155.4.238    vpc-8e9861e2   dev-compute-02
+    i-c8d6b639          stopped    c3.large  54.88.208.204   10.155.4.4      vpc-8e9861e2   dev-compute-03
+
+
+----------
+
+
 ec2runner.py - starting/stopping instances.
 
 Example:
@@ -31,20 +45,6 @@ Example:
     ami-0216bb78: devops-infra-cis-centos-1.0.0-SNAPSHOT-hvm-20171030085909632
     ami-034c7e14: devops-infra-sles-11.4.9-hvm
     ami-08ae9460: emr 3.7.0-ami-roller-20 paravirtual is
-
-
-----------
-
-
-ec2top.py - listing of your EC2 machines
-
-    newuser@vbox:~$ ec2top --sort Type
-    i-9262c07c          stopped    c3.large  54.84.57.91     10.155.4.105    vpc-8e9861e2   db2012-compute-01
-    i-0f4e12fe047c8968b running    c3.large  54.165.160.131  10.155.4.98     vpc-8e9861e2   dev-auto-s3-compute101
-    i-0b545c4b945aa6183 running    c3.large  54.236.202.212  10.155.2.199    vpc-8e9861e2   dev-compute-01
-    i-0ce03d96ac577bba0 running    c3.large  34.192.41.156   10.155.2.241    vpc-8e9861e2   dev-compute-01-phx
-    i-0401332de32993d1e running    c3.large  54.172.49.236   10.155.4.238    vpc-8e9861e2   dev-compute-02
-    i-c8d6b639          stopped    c3.large  54.88.208.204   10.155.4.4      vpc-8e9861e2   dev-compute-03
 
 
 ----------
