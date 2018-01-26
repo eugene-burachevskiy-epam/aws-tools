@@ -10,9 +10,9 @@ ec2runner.py - starting/stopping instances.
 
 Example:
 
-    newuser@vbox:~$ ec2runner stop -p default -r us-east-1 i-007f29708864cc40b
+    newuser@vbox:~$ ec2runner --profile default --region us-east-1 stop i-007f29708864cc40b
     Response code: 200
-    Instance:i-007f29708864cc40b stopped => stopped
+    Instance:i-007f29708864cc40b running => stopping
 
 
 ----------
