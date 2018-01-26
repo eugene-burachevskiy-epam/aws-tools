@@ -10,9 +10,9 @@ ec2runner.py - starting/stopping instances.
 
 Example:
 
-    newuser@vbox:~$ ec2runner.py stop -p default -r us-east-1 i-007f29708864cc40b
+    newuser@vbox:~$ ec2runner stop -p default -r us-east-1 i-007f29708864cc40b
     Response code: 200
-    Instance:i-007f29708864cc40b running => stopping
+    Instance:i-007f29708864cc40b stopped => stopped
 
 
 ----------
@@ -38,13 +38,29 @@ Example:
 
 ec2top.py - listing of your EC2 machines
 
-Example:
-
-    newuser@vbox:~$ ec2top -r us-east-1 --sort Type
+    newuser@vbox:~$ ec2top --sort Type
     i-9262c07c          stopped    c3.large  54.84.57.91     10.155.4.105    vpc-8e9861e2   db2012-compute-01
     i-0f4e12fe047c8968b running    c3.large  54.165.160.131  10.155.4.98     vpc-8e9861e2   dev-auto-s3-compute101
     i-0b545c4b945aa6183 running    c3.large  54.236.202.212  10.155.2.199    vpc-8e9861e2   dev-compute-01
     i-0ce03d96ac577bba0 running    c3.large  34.192.41.156   10.155.2.241    vpc-8e9861e2   dev-compute-01-phx
     i-0401332de32993d1e running    c3.large  54.172.49.236   10.155.4.238    vpc-8e9861e2   dev-compute-02
     i-c8d6b639          stopped    c3.large  54.88.208.204   10.155.4.4      vpc-8e9861e2   dev-compute-03
+
+
+----------
+
+
+sgparser.py - Parsing of Security Groups to CSV-compatible format for each rule. Can be handy for importing output to rdatabases.
+
+Example:
+
+    newuser@vbox:~$ ./sgparser.py --profile default --region us-east-1
+    sg-d2161bba, default, default group, 0.0.0.0/0, tcp, 22, 22
+    sg-930d07fb, dev-ds-custom-01, dev-ds-custom-01, 0.0.0.0/0, tcp, 22, 22
+    sg-2e16b645, AWS-OpsWorks-Rails-App-Server, AWS OpsWorks Rails-App server - do not change or delete, 0.0.0.0/0, tcp, 22, 22
+    sg-2e16b645, AWS-OpsWorks-Rails-App-Server, AWS OpsWorks Rails-App server - do not change or delete, 0.0.0.0/0, tcp, 80, 80
+    sg-2e16b645, AWS-OpsWorks-Rails-App-Server, AWS OpsWorks Rails-App server - do not change or delete, 0.0.0.0/0, tcp, 443, 443
+    sg-2c16b647, AWS-OpsWorks-PHP-App-Server, AWS OpsWorks PHP-App server - do not change or delete, 0.0.0.0/0, tcp, 22, 22
+    sg-2c16b647, AWS-OpsWorks-PHP-App-Server, AWS OpsWorks PHP-App server - do not change or delete, 0.0.0.0/0, tcp, 80, 80
+    sg-2c16b647, AWS-OpsWorks-PHP-App-Server, AWS OpsWorks PHP-App server - do not change or delete, 0.0.0.0/0, tcp, 443, 443
 
