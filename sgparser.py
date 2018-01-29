@@ -34,25 +34,39 @@ except yaml.YAMLError as e:
     print(e)
     exit(1)
 
-
 for i in range(len(input['SecurityGroups'])):
     item = []
     item.append(input['SecurityGroups'][i]['GroupId'])
     item.append(input['SecurityGroups'][i]['GroupName'])
     item.append(input['SecurityGroups'][i]['Description'].replace(',', ' and '))
     for f in input['SecurityGroups'][i]['IpPermissions']:
-
-        for r in f['IpRanges']:
-            rule = copy.copy(item)
-            rule.append(r['CidrIp'])
-            rule.append(f['IpProtocol'])
-            if 'FromPort' in f.keys():
-                rule.append(str(f['FromPort']))
-            else:
-                rule.append('no_fromport')
-            if 'ToPort' in f.keys():
-                rule.append(str(f['ToPort']))
-            else:
-                rule.append('no_toport')
-            formatted_rule = ', '.join(rule)
-            print(formatted_rule)
+        if len(f['UserIdGroupPairs']) == 0:
+            for r in f['IpRanges']:
+                rule = copy.copy(item)
+                rule.append(r['CidrIp'])
+                rule.append(f['IpProtocol'])
+                if 'FromPort' in f.keys():
+                    rule.append(str(f['FromPort']))
+                else:
+                    rule.append('no_fromport')
+                if 'ToPort' in f.keys():
+                    rule.append(str(f['ToPort']))
+                else:
+                    rule.append('no_toport')
+                formatted_rule = ', '.join(rule)
+                print(formatted_rule)
+        else:
+            for r in f['UserIdGroupPairs']:
+                rule = copy.copy(item)
+                rule.append(r['GroupId'])
+                rule.append(f['IpProtocol'])
+                if 'FromPort' in f.keys():
+                    rule.append(str(f['FromPort']))
+                else:
+                    rule.append('no_fromport')
+                if 'ToPort' in f.keys():
+                    rule.append(str(f['ToPort']))
+                else:
+                    rule.append('no_toport')
+                formatted_rule = ', '.join(rule)
+                print(formatted_rule)
