@@ -75,5 +75,5 @@ if args.sort_key:
     sorted_list = sorted(sorted_list, key=itemgetter(args.sort_key))
 
 for i in range(len(sorted_list)):
-    print(sorted_list[i]['Id'].ljust(20) + sorted_list[i]['Status'].ljust(11) + sorted_list[i]['Type'].ljust(10)\
+    print(sorted_list[i]['Id'].ljust(20) + sorted_list[i]['Status'].ljust(11) + sorted_list[i]['Type'].ljust(12)\
      + sorted_list[i]['pubIP'].ljust(16) + sorted_list[i]['privIP'].ljust(16) + sorted_list[i]['VPC'].ljust(15) + sorted_list[i]['Name'] )
