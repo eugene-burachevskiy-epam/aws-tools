@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 #
-#     Listing of your AWS EC2 instances, RDS, Elasticache
+#     Listing of your AWS EC2 instances.
 # App require boto3 AWS-API module, make sure it is installed by running 'sudo pip3 install boto3'
 # If no args specified app lists your EC2 instances using .aws/config "Default" profile and region. Use ./ec2top.py --help for possible options
 #
@@ -161,3 +161,4 @@ if args.ech:
     for i in sorted_list:
         print(i['CacheClusterId'].ljust(32) + i['CacheNodeType'].ljust(20) + i['CacheClusterStatus'].ljust(12) \
         + i['Engine'].ljust(12) + i['EngineVersion'].ljust(12) + str(i['NumCacheNodes']).ljust(5) + i['PreferredAvailabilityZone'].ljust(16))
+
