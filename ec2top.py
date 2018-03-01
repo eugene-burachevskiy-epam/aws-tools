@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 #
-#     Listing of your AWS EC2 instances.
+#     Listing of your AWS EC2 instances, RDS, Elasticache
 # App require boto3 AWS-API module, make sure it is installed by running 'sudo pip3 install boto3'
 # If no args specified app lists your EC2 instances using .aws/config "Default" profile and region. Use ./ec2top.py --help for possible options
 #
@@ -91,7 +91,9 @@ if args.ec2:
             else:
                 top_instance.setdefault('VPC', 'None')
                 top_instance.setdefault('VPCname', 'None')
-
+            
+            if top_instance['Name'] is None:
+                top_instance['Name'] = 'None'
             top_list.append(top_instance)
 
     sorted_list = sorted(top_list, key=itemgetter('Name'))
