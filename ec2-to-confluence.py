@@ -20,7 +20,7 @@ confl = {
     'pass':'PASSTRING',
     'space':'DevOps',
     'pagetitle':'',
-    'cli-path':'CLIPATHSTRING'
+    'cli-path':'./atlassian-cli-3.1.0/lib/confluence-cli-3.1.0.jar'
 }
 
 if len(sys.argv) == 1:
