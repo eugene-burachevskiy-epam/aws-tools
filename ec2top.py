@@ -10,7 +10,7 @@ import boto3, argparse
 from operator import itemgetter
 
 parser = argparse.ArgumentParser(description='AWS EC2 instances listing.')
-parser.add_argument('-p', '--profile', action="store", dest="aws_profile", help='.aws/config profile name. Using "default" if not set')
+parser.add_argument('-p', '--profile', action="store", dest="aws_profile", help='.aws/credentials profile name. Using "default" if not set')
 parser.add_argument('-r', '--region', action="store", dest="aws_region", help='EC2 region name. Using "default" for your profile if not set')
 parser.add_argument('-s', '--sort', action="store", dest="sort_key", help='Sort your output by column name. Default sorting is "Name". Other options are Status|Type|VPC|pubIP|privIP ')
 group = parser.add_mutually_exclusive_group()
