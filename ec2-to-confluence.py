@@ -19,7 +19,7 @@ confl = {
     'user':'USERSTRING',
     'pass':'PASSTRING',
     'space':'OPS',
-    'parent':'Assets Inventory'
+    'parent':'Assets Inventory',
     'pagetitle':'',
     'cli-path':'./atlassian-cli-3.1.0/lib/confluence-cli-3.1.0.jar'
 }
