@@ -18,7 +18,8 @@ confl = {
     'url':'URLSTRING',
     'user':'USERSTRING',
     'pass':'PASSTRING',
-    'space':'DevOps',
+    'space':'OPS',
+    'parent':'Assets Inventory'
     'pagetitle':'',
     'cli-path':'./atlassian-cli-3.1.0/lib/confluence-cli-3.1.0.jar'
 }
@@ -106,5 +107,5 @@ print('\nUpdating Confluence page...')
 confl['pass'] = base64.b64decode(bytes(confl['pass'], 'UTF-8'), altchars=None).decode("utf-8")
 confl['pagetitle'] = 'AWS resources list - %s, %s' % (aws_profile.upper(), aws_region)
 
-p = subprocess.check_output('java -jar %(cli-path)s --server %(url)s --user "%(user)s" --password "%(pass)s" --action storePage --space "%(space)s" --parent @home --title "%(pagetitle)s" --file page.xml --noConvert' % confl, shell=True)
+p = subprocess.check_output('java -jar %(cli-path)s --server %(url)s --user "%(user)s" --password "%(pass)s" --action storePage --space "%(space)s" --parent "%(parent)s" --title "%(pagetitle)s" --file page.xml --noConvert' % confl, shell=True)
 print(p.decode("utf-8"))
