@@ -12,7 +12,7 @@
 # 'pagetitle' is generating dynamically
 #
 
-import subprocess, datetime, sys, base64
+import subprocess, datetime, sys, base64, pytz
 
 confl = {
     'url':'URLSTRING',
@@ -32,12 +32,14 @@ else:
     aws_profile = sys.argv[1]
     aws_region = sys.argv[2]
 
-curdate = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+fmt = '%Y-%m-%d %H:%M:%S'
+curdate = datetime.datetime.now(pytz.timezone("America/Los_Angeles")).strftime(fmt)
 
 print('Pulling EC2 data...')
 out = subprocess.check_output(['./ec2top.py', '-p', aws_profile, '-r', aws_region, '-s', 'VPC'])
 out = out.decode("utf-8")
 outlist = out.split('\n')
+outlist = list(filter(None, outlist))
 
 file = open('page.xml', 'w')
 file.write("<i>Status updated: %s </i>\n\n<h2>EC2 inventory</h2>\n<table>\n<tr>\n<th>ID</th><th>Status</th><th>Type</th><th>Public IP</th><th>Private IP</th><th>VPC</th><th>VPC name</th><th>Name</th></tr>"\
@@ -46,6 +48,7 @@ file.close()
 
 for rownum in range(len(outlist)):
     outitem = outlist[rownum].split()
+    outitem[0], outitem[-1] =  outitem[-1], outitem[0]
     outitem.insert(0, '<tr>')
     for i in range(1, len(outitem)):
         if i == 4 and not outitem[i].startswith('None'):
