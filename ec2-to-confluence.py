@@ -42,7 +42,7 @@ outlist = out.split('\n')
 outlist = list(filter(None, outlist))
 
 file = open('page.xml', 'w')
-file.write("<i>Status updated: %s </i>\n\n<h2>EC2 inventory</h2>\n<table>\n<tr>\n<th>ID</th><th>Status</th><th>Type</th><th>Public IP</th><th>Private IP</th><th>VPC</th><th>VPC name</th><th>Name</th></tr>"\
+file.write("<i>Status updated: %s </i>\n\n<h2>EC2 inventory</h2>\n<table>\n<tr>\n<th>Name</th><th>Status</th><th>Type</th><th>Public IP</th><th>Private IP</th><th>VPC</th><th>VPC name</th><th>ID</th></tr>"\
  % (curdate))
 file.close()
 
