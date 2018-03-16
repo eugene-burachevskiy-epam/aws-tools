@@ -32,7 +32,7 @@ else:
     aws_profile = sys.argv[1]
     aws_region = sys.argv[2]
 
-fmt = '%Y-%m-%d %H:%M:%S'
+fmt = '%Y-%m-%d %H:%M:%S %Z %z'
 curdate = datetime.datetime.now(pytz.timezone("America/Los_Angeles")).strftime(fmt)
 
 print('Pulling EC2 data...')
