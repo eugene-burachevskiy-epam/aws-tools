@@ -102,8 +102,8 @@ if args.ec2:
         sorted_list = sorted(sorted_list, key=itemgetter(args.sort_key))
 
     for i in range(len(sorted_list)):
-        print(sorted_list[i]['Name'].ljust(40) + sorted_list[i]['Status'].ljust(11) + sorted_list[i]['Type'].ljust(12)\
-        + sorted_list[i]['pubIP'].ljust(16) + sorted_list[i]['privIP'].ljust(16) + sorted_list[i]['VPC'].ljust(13) + sorted_list[i]['VPCname'][:16].ljust(17) + sorted_list[i]['Id'] )
+        print(sorted_list[i]['Id'].ljust(20) + sorted_list[i]['Status'].ljust(11) + sorted_list[i]['Type'].ljust(12)\
+        + sorted_list[i]['pubIP'].ljust(16) + sorted_list[i]['privIP'].ljust(16) + sorted_list[i]['VPC'].ljust(13) + sorted_list[i]['VPCname'][:16].ljust(17) + sorted_list[i]['Name'] )
 
 
 if args.rds:
