@@ -3,7 +3,7 @@
 #
 #     Listing of your AWS EC2 instances, RDS, Elasticache
 # App require boto3 AWS-API module, make sure it is installed by running 'sudo pip3 install boto3'
-# If no args specified app lists your EC2 instances using .aws/config "Default" profile and region. Use ./ec2top.py --help for possible options
+# If no args specified app lists your EC2 instances using .aws/credentials "Default" profile and region. Use ./ec2top.py --help for possible options
 #
 
 import boto3, argparse
@@ -36,20 +36,25 @@ def instance_name(tags):
             return i['Value'].replace(' ', '_')
 
 #VPC ID string as input
+vpcnames = {}
 def vpc_name(id):
-    if args.aws_profile:
-        session = boto3.Session(profile_name=args.aws_profile)
+    if id not in vpcnames.keys():
+        if args.aws_profile:
+            session = boto3.Session(profile_name=args.aws_profile)
+        else:
+            session = boto3.Session()
+        if args.aws_region:
+            ec2 = session.client('ec2', region_name=args.aws_region)
+        else:
+            ec2 = session.client('ec2')
+        vpcdata = ec2.describe_vpcs()
+        for vpci in vpcdata['Vpcs']:
+            if vpci['VpcId'] == id:
+                vpcname = instance_name(vpci['Tags']).replace(' ', '_')
+        vpcnames[id] = vpcname
+        return vpcname
     else:
-        session = boto3.Session()
-    if args.aws_region:
-        ec2 = session.client('ec2', region_name=args.aws_region)
-    else:
-        ec2 = session.client('ec2')
-    vpcdata = ec2.describe_vpcs()
-    for vpci in vpcdata['Vpcs']:
-        if vpci['VpcId'] == id:
-            vpcname = instance_name(vpci['Tags']).replace(' ', '_')
-    return vpcname
+        return vpcnames[id]
 
 
 if args.ec2:
