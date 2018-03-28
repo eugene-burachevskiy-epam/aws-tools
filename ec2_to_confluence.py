@@ -24,6 +24,7 @@ confl = {
     'cli-path':'./atlassian-cli-3.1.0/lib/confluence-cli-3.1.0.jar'
 }
 
+
 if len(sys.argv) == 1:
     #for testing purposes
     aws_profile = 'fed'
@@ -69,8 +70,12 @@ print('Pulling ELB data...')
 out = subprocess.check_output(['./ec2top.py', '-p', aws_profile, '-r', aws_region, '--elb'])
 out = out.decode("utf-8")
 outlist = out.split('\n')
+outlist = list(filter(None, outlist))
 for rownum in range(len(outlist)):
     outitem = outlist[rownum].split()
+    #outitem[2], outitem[-1] = outitem[-1], outitem[2]
+    outitem[2] = outitem[2].replace(',','<br />')
+    outitem[-1] = outitem[-1].replace('_',' ')
     outitem.insert(0, '<tr>')
     for i in range(1, len(outitem)):
         outitem[i] = '<td>' + outitem[i] + '</td>'
@@ -89,6 +94,7 @@ print('Pulling RDS data...')
 out = subprocess.check_output(['./ec2top.py', '-p', aws_profile, '-r', aws_region, '--rds'])
 out = out.decode("utf-8")
 outlist = out.split('\n')
+outlist = list(filter(None, outlist))
 for rownum in range(len(outlist)):
     outitem = outlist[rownum].split()
     outitem.insert(0, '<tr>')
@@ -109,6 +115,7 @@ print('Pulling Elasticache data...')
 out = subprocess.check_output(['./ec2top.py', '-p', aws_profile, '-r', aws_region, '--ech'])
 out = out.decode("utf-8")
 outlist = out.split('\n')
+outlist = list(filter(None, outlist))
 for rownum in range(len(outlist)):
     outitem = outlist[rownum].split()
     outitem.insert(0, '<tr>')
