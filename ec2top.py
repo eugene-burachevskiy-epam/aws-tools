@@ -191,7 +191,7 @@ if args.elb:
         listener = []
         for f in i['ListenerDescriptions']:
             listener.append('%s%d>%s%d' % (f['Listener']['Protocol'], f['Listener']['LoadBalancerPort'], f['Listener']['InstanceProtocol'], f['Listener']['InstancePort']) )
-        top_instance.setdefault('Listener', ' '.join(listener) + ' ' )
+        top_instance.setdefault('Listener', ','.join(listener) + ' ' )
         
         fmt = '%Y-%m-%d %H:%M'
         top_instance.setdefault('Created', i['CreatedTime'].strftime(fmt))
