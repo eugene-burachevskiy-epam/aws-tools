@@ -186,6 +186,7 @@ if args.elb:
         top_instance.setdefault('VPCId', i['VPCId'])
         vpcname = vpc_name(i['VPCId'])
         top_instance.setdefault('VPCname', vpcname)
+        top_instance.setdefault('Scheme', i['Scheme'])
         
         listener = []
         for f in i['ListenerDescriptions']:
@@ -199,5 +200,5 @@ if args.elb:
     sorted_list = sorted(top_list, key=itemgetter('DNSName'))
 
     for i in sorted_list:
-        print(i['DNSName'][:45].ljust(48) + i['Listener'].ljust(32) + i['VPCId'].ljust(13) + i['VPCname'][:15].ljust(16) + i['Created'].ljust(20))
+        print(i['DNSName'][:50].ljust(51) + i['Scheme'].ljust(16) + i['Listener'].ljust(30) + i['VPCId'].ljust(13) + i['VPCname'][:15].ljust(16) + i['Created'].ljust(20))
 
