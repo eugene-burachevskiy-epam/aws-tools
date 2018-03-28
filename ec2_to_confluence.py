@@ -59,6 +59,26 @@ for rownum in range(len(outlist)):
     file.write(' '.join(outitem))
     file.write('\n')
     file.close()
+
+file = open('page.xml', 'a')
+file.write('\n</table>\n\n')
+file.write('<h2>ELB inventory</h2>\n<table>\n<tr>\n<th>DNS Name</th><th>Scheme</th><th>Listeners</th><th>VPC ID</th><th>VPC Name</th><th>Created on</th></tr>')
+file.close()
+
+print('Pulling ELB data...')
+out = subprocess.check_output(['./ec2top.py', '-p', aws_profile, '-r', aws_region, '--elb'])
+out = out.decode("utf-8")
+outlist = out.split('\n')
+for rownum in range(len(outlist)):
+    outitem = outlist[rownum].split()
+    outitem.insert(0, '<tr>')
+    for i in range(1, len(outitem)):
+        outitem[i] = '<td>' + outitem[i] + '</td>'
+    outitem.append('</tr>')
+    file = open('page.xml', 'a')
+    file.write(' '.join(outitem))
+    file.write('\n')
+    file.close()
     
 file = open('page.xml', 'a')
 file.write('\n</table>\n\n')
@@ -112,3 +132,4 @@ confl['pagetitle'] = 'AWS resources list - %s, %s' % (aws_profile.upper(), aws_r
 
 p = subprocess.check_output('java -jar %(cli-path)s --server %(url)s --user "%(user)s" --password "%(pass)s" --action storePage --space "%(space)s" --parent "%(parent)s" --title "%(pagetitle)s" --file page.xml --noConvert' % confl, shell=True)
 print(p.decode("utf-8"))
+
