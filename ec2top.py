@@ -12,14 +12,15 @@ from operator import itemgetter
 parser = argparse.ArgumentParser(description='AWS EC2 instances listing.')
 parser.add_argument('-p', '--profile', action="store", dest="aws_profile", help='.aws/credentials profile name. Using "default" if not set')
 parser.add_argument('-r', '--region', action="store", dest="aws_region", help='EC2 region name. Using "default" for your profile if not set')
-parser.add_argument('-s', '--sort', action="store", dest="sort_key", help='Sort your output by column name. Default sorting is "Name". Other options are Status|Type|VPC|pubIP|privIP ')
+parser.add_argument('-s', '--sort', action="store", dest="sort_key", help='Sort your output by column name. Default sorting is "Name". Other options are Status|Type|VPC|pubIP|privIP. Works with --ec2 only. ')
 group = parser.add_mutually_exclusive_group()
 group.add_argument('--rds', action="store_true", default=False, help='RDS data')
 group.add_argument('--ech', action="store_true", default=False, help='Elastic cache data')
+group.add_argument('--elb', action="store_true", default=False, help='ELB data')
 group.add_argument('--ec2', action="store_true", default=True, help='EC2 data (Default).')
 args = parser.parse_args()
 
-if args.ech or args.rds:
+if args.ech or args.rds or args.elb:
     args.ec2 = False
 #print(args)
 
@@ -142,6 +143,7 @@ if args.rds:
         + i['DBInstanceStatus'].ljust(12) + i['Engine'].ljust(12) + i['EngineVersion'].ljust(12) \
         + i['AvailabilityZone'].ljust(16) + i['VpcId'].ljust(16) + i['VPCname'][:15].ljust(16))
 
+
 if args.ech:
     if args.aws_region:
         ech = session.client('elasticache', region_name=args.aws_region)
@@ -168,3 +170,34 @@ if args.ech:
     for i in sorted_list:
         print(i['CacheClusterId'].ljust(32) + i['CacheNodeType'].ljust(20) + i['CacheClusterStatus'].ljust(12) \
         + i['Engine'].ljust(12) + i['EngineVersion'].ljust(12) + str(i['NumCacheNodes']).ljust(5) + i['PreferredAvailabilityZone'].ljust(16))
+
+
+if args.elb:
+    if args.aws_region:
+        elb = session.client('elb', region_name=args.aws_region)
+    else:
+        elb = session.client('elb')
+    response = elb.describe_load_balancers()
+
+    top_list = []
+    for i in response['LoadBalancerDescriptions']:
+        top_instance = {}
+        top_instance.setdefault('DNSName', i['DNSName'])
+        top_instance.setdefault('VPCId', i['VPCId'])
+        vpcname = vpc_name(i['VPCId'])
+        top_instance.setdefault('VPCname', vpcname)
+        
+        listener = []
+        for f in i['ListenerDescriptions']:
+            listener.append('%s%d>%s%d' % (f['Listener']['Protocol'], f['Listener']['LoadBalancerPort'], f['Listener']['InstanceProtocol'], f['Listener']['InstancePort']) )
+        top_instance.setdefault('Listener', ' '.join(listener) + ' ' )
+        
+        fmt = '%Y-%m-%d %H:%M'
+        top_instance.setdefault('Created', i['CreatedTime'].strftime(fmt))
+        
+        top_list.append(top_instance)
+    sorted_list = sorted(top_list, key=itemgetter('DNSName'))
+
+    for i in sorted_list:
+        print(i['DNSName'][:45].ljust(48) + i['Listener'].ljust(32) + i['VPCId'].ljust(13) + i['VPCname'][:15].ljust(16) + i['Created'].ljust(20))
+
