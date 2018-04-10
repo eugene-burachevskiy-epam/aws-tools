@@ -12,7 +12,7 @@ from operator import itemgetter
 parser = argparse.ArgumentParser(description='AWS EC2 instances listing.')
 parser.add_argument('-p', '--profile', action="store", dest="aws_profile", help='.aws/credentials profile name. Using "default" if not set')
 parser.add_argument('-r', '--region', action="store", dest="aws_region", help='EC2 region name. Using "default" for your profile if not set')
-parser.add_argument('-s', '--sort', action="store", dest="sort_key", help='Sort your output by column name. Default sorting is "Name". Other options are Status|Type|VPC|pubIP|privIP. Works with --ec2 only. ')
+parser.add_argument('-s', '--sort', action="store", dest="sort_key", help='Sort your output by column name. Default sorting is "Name". Other options are Status|Type|VPC|pubIP|privIP|Time. Works with --ec2 only. ')
 group = parser.add_mutually_exclusive_group()
 group.add_argument('--rds', action="store_true", default=False, help='RDS data')
 group.add_argument('--ech', action="store_true", default=False, help='Elastic cache data')
@@ -65,6 +65,7 @@ if args.ec2:
         ec2 = session.client('ec2')
     response = ec2.describe_instances()
 
+    fmt = '%Y-%m-%d %H:%M'
     top_list = []
 
     for i in range(len(response['Reservations'])):
@@ -75,6 +76,7 @@ if args.ec2:
             top_instance.setdefault('Status', instance['State']['Name'])
             top_instance.setdefault('Type', instance['InstanceType'])
             top_instance.setdefault('Id', instance['InstanceId'])
+            top_instance.setdefault('Time', instance['LaunchTime'].strftime(fmt))
             if 'Tags' in instance.keys():
                 top_instance.setdefault('Name', instance_name(instance['Tags']))
             else:
@@ -109,7 +111,7 @@ if args.ec2:
 
     for i in range(len(sorted_list)):
         print(sorted_list[i]['Id'].ljust(20) + sorted_list[i]['Status'].ljust(11) + sorted_list[i]['Type'].ljust(12)\
-        + sorted_list[i]['pubIP'].ljust(16) + sorted_list[i]['privIP'].ljust(16) + sorted_list[i]['VPC'].ljust(13) + sorted_list[i]['VPCname'][:16].ljust(17) + sorted_list[i]['Name'] )
+        + sorted_list[i]['pubIP'].ljust(16) + sorted_list[i]['privIP'].ljust(16) + sorted_list[i]['VPC'].ljust(13) + sorted_list[i]['VPCname'][:16].ljust(17) + sorted_list[i]['Time'].ljust(17) + sorted_list[i]['Name'] )
 
 
 if args.rds:
@@ -193,7 +195,7 @@ if args.elb:
             listener.append('%s%d>%s%d' % (f['Listener']['Protocol'], f['Listener']['LoadBalancerPort'], f['Listener']['InstanceProtocol'], f['Listener']['InstancePort']) )
         top_instance.setdefault('Listener', ','.join(listener) + ' ' )
         
-        fmt = '%Y-%m-%d %H:%M'
+        fmt = '%Y-%m-%d_%H:%M'
         top_instance.setdefault('Created', i['CreatedTime'].strftime(fmt))
         
         top_list.append(top_instance)
