@@ -24,7 +24,6 @@ confl = {
     'cli-path':'./atlassian-cli-3.1.0/lib/confluence-cli-3.1.0.jar'
 }
 
-
 if len(sys.argv) == 1:
     #for testing purposes
     aws_profile = 'fed'
@@ -43,12 +42,14 @@ outlist = out.split('\n')
 outlist = list(filter(None, outlist))
 
 file = open('page.xml', 'w')
-file.write("<i>Status updated: %s </i>\n\n<h2>EC2 inventory</h2>\n<table>\n<tr>\n<th>Name</th><th>Status</th><th>Type</th><th>Public IP</th><th>Private IP</th><th>VPC</th><th>VPC name</th><th>ID</th></tr>"\
+file.write("<i>Status updated: %s </i>\n\n<h2>EC2 inventory</h2>\n<table>\n<tr>\n<th>Name</th><th>Status</th><th>Type</th><th>Public IP</th><th>Private IP</th><th>VPC</th><th>VPC name</th><th>LaunchTime</th><th>ID</th></tr>"\
  % (curdate))
 file.close()
 
 for rownum in range(len(outlist)):
     outitem = outlist[rownum].split()
+    outitem[7] = outitem[7] + ' ' + outitem[8]
+    del outitem[8]
     outitem[0], outitem[-1] =  outitem[-1], outitem[0]
     outitem.insert(0, '<tr>')
     for i in range(1, len(outitem)):
