@@ -60,6 +60,21 @@ elif args.action == 'start':
             print('Instance:' + response['StartingInstances'][0]['InstanceId'] + ' ' + response['StartingInstances'][0]['PreviousState']['Name'] + ' => ' + response['StartingInstances'][0]['CurrentState']['Name'])
         except ClientError as e:
             print(e)
+elif args.action == 'terminate':
+    if args.test:
+        try:
+            response = ec2.terminate_instances(InstanceIds=[args.instance_id], DryRun=True)
+            print(response)
+        except ClientError as e:
+            print(e)
+    else:
+        try:
+            response = ec2.terminate_instances(InstanceIds=[args.instance_id], DryRun=False)
+            print('Response code: ' + str(response['ResponseMetadata']['HTTPStatusCode']))
+            #print('Instance:' + response['StartingInstances'][0]['InstanceId'] + ' ' + response['StartingInstances'][0]['PreviousState']['Name'] + ' => ' + response['StartingInstances'][0]['CurrentState']['Name'])
+        except ClientError as e:
+            print(e)
 else:
     print('Action ' + str(args.action) + ' not definied! Use "ec2run.py --help" for details!')
     exit(1)
+
