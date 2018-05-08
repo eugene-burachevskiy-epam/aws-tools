@@ -135,15 +135,16 @@ if args.rds:
         top_instance.setdefault('VpcId', i['DBSubnetGroup']['VpcId'])
         vpcname = vpc_name(i['DBSubnetGroup']['VpcId'])
         top_instance.setdefault('VPCname', vpcname)
+        top_instance.setdefault('Endpoint', i['Endpoint']['Address'] + ':' + str(i['Endpoint']['Port']))
 
         top_list.append(top_instance)
 
-    sorted_list = sorted(top_list, key=itemgetter('DBName'))
+    sorted_list = sorted(top_list, key=itemgetter('DBInstanceIdentifier'))
 
     for i in sorted_list:
-        print(i['DBName'].ljust(20) + i['DBInstanceIdentifier'][:18].ljust(20) + i['DBInstanceClass'].ljust(16) \
-        + i['DBInstanceStatus'].ljust(12) + i['Engine'].ljust(12) + i['EngineVersion'].ljust(12) \
-        + i['AvailabilityZone'].ljust(16) + i['VpcId'].ljust(16) + i['VPCname'][:15].ljust(16))
+        print(i['DBInstanceIdentifier'][:18].ljust(19) + i['DBName'][:12].ljust(13) + i['DBInstanceClass'].ljust(14) \
+        + i['DBInstanceStatus'].ljust(11) + i['Engine'].ljust(12) + i['EngineVersion'].ljust(14) \
+        + i['AvailabilityZone'].ljust(12) + i['VpcId'].ljust(13) + i['VPCname'][:15].ljust(16) + i['Endpoint'])
 
 
 if args.ech:
