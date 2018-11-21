@@ -3,11 +3,15 @@
 import boto3, argparse, datetime, yaml, sys
 
 parser = argparse.ArgumentParser(description='AWS Amazon EC2 Container Registry cleaner')
-parser.add_argument('-l', '--list', action="store_true", dest="list_repo", default=False, help='Show repository info. Use --list-all to get overall statistics')
-parser.add_argument('-d', '--delete', action="store", dest="days_ago", type=int, help='Delete images that are older then "days_ago" integer')
+
+group = parser.add_mutually_exclusive_group()
+group.add_argument('-l', '--list', action="store_true", dest="list_repo", default=False, help='Show repository info')
+group.add_argument('--list-all', action="store_true", dest="list_allrepo", default=False, help='Show repository info')
+group.add_argument('-d', '--delete', action="store", dest="days_ago", type=int, help='Delete images that are older then "DAYS_AGO"')
+
 parser.add_argument('-p', '--profile', action="store", dest="aws_profile", help='.aws/credentials profile name. Using "default" if not set')
 parser.add_argument('-r', '--region', action="store", dest="aws_region", help='AWS region name. Using "default" for your profile if not set')
-parser.add_argument('repository_name',  action="store", help='ECR repository name')
+parser.add_argument('repository_name',  action="store", nargs='?', help='ECR repository name')
 args = parser.parse_args()
 
 
@@ -52,10 +56,11 @@ if args.list_repo:
     print(str(amount) + ' / 1000 images')
     sys.exit(0)
 
-if args.repository_name == '--list-all':
+if args.list_allrepo:
     allrepos = client.describe_repositories(maxResults=1000)['repositories']
     for i in allrepos:
         amount = len(client.describe_images(repositoryName=i['repositoryName'], maxResults=1000)['imageDetails'])
         print(str(amount) + ' / 1000 ' + i['repositoryName'])
+    sys.exit(0)
 
 print(parser.parse_args(['-h']))
