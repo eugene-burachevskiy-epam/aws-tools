@@ -52,5 +52,6 @@ if args.list_repo:
     uri = client.describe_repositories(repositoryNames=[args.repository_name])['repositories'][0]['repositoryUri']
     print(uri)
     print(str(amount) + ' / 1000 images')
+    sys.exit(0)
 
 print(parser.parse_args(['-h']))
