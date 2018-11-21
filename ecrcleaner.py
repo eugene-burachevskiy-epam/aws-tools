@@ -10,16 +10,18 @@ parser.add_argument('-r', '--region', action="store", dest="aws_region", help='A
 parser.add_argument('repository_name',  action="store", help='ECR repository name')
 args = parser.parse_args()
 
+
+if args.aws_profile:
+    session = boto3.Session(profile_name=args.aws_profile)
+else:
+    session = boto3.Session()
+client = session.client('ecr', region_name=args.aws_region)
+
+
 if args.days_ago:
     delta = datetime.timedelta(days=args.days_ago)
     until_datetime = datetime.datetime.now() - delta
 
-
-    if args.aws_profile:
-        session = boto3.Session(profile_name=args.aws_profile)
-    else:
-        session = boto3.Session()
-    client = session.client('ecr', region_name=args.aws_region)
 
     images = client.describe_images(repositoryName=args.repository_name, maxResults=1000)['imageDetails']
     todelete = []
