@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import boto3, argparse, datetime
+import boto3, argparse, datetime, sys
 
 parser = argparse.ArgumentParser(description='AWS Amazon EC2 Container Registry cleaner')
 parser.add_argument('-p', '--profile', action="store", dest="aws_profile", help='.aws/credentials profile name. Using "default" if not set')
@@ -24,6 +24,15 @@ todelete = []
 
 for i in images:
     if until_datetime > i['imagePushedAt'].replace(tzinfo=None):
-        todelete.append(i['imageDigest'])
+        todelete.append( {'imageDigest':i['imageDigest']} )
 
 print(str(len(todelete)) + ' images will be deleted.')
+print('[Yes/No] ?')
+gg = input()
+
+if gg.lower() in ('yes', 'y'):
+    response = client.batch_delete_image(repositoryName='string', imageIds=todelete)
+    print('Deleted: ' + str( len(response['imageIds']) ) + ' images')
+    print('Failures:' + str( len(response['failures']) ))
+else:
+    sys.exit(1)
