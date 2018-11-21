@@ -27,12 +27,14 @@ for i in images:
         todelete.append( {'imageDigest':i['imageDigest']} )
 
 print(str(len(todelete)) + ' images will be deleted.')
+if len(todelete) == 0:
+    sys.exit(0)
 print('[Yes/No] ?')
 gg = input()
 
 if gg.lower() in ('yes', 'y'):
-    response = client.batch_delete_image(repositoryName='string', imageIds=todelete)
+    response = client.batch_delete_image(repositoryName=args.repository_name, imageIds=todelete)
     print('Deleted: ' + str( len(response['imageIds']) ) + ' images')
     print('Failures:' + str( len(response['failures']) ))
 else:
-    sys.exit(1)
+    sys.exit(0)
