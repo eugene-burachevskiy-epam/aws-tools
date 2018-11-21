@@ -34,9 +34,11 @@ if args.days_ago:
     gg = input()
 
     if gg.lower() in ('yes', 'y'):
-        response = client.batch_delete_image(repositoryName=args.repository_name, imageIds=todelete)
-        print('Deleted: ' + str( len(response['imageIds']) ) + ' images')
-        print('Failures:' + str( len(response['failures']) ))
+        chunks = [todelete[x:x+100] for x in range(0, len(todelete), 100)]
+        for part in chunks:
+            response = client.batch_delete_image(repositoryName=args.repository_name, imageIds=part)
+            print('Deleted: ' + str(len(response['imageIds'])) + ' Failures: ' + str(len(response['failures'])) )
+
     else:
         sys.exit(0)
 else:
