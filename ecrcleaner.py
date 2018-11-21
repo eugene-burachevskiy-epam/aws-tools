@@ -9,32 +9,35 @@ parser.add_argument('-d', '--delete', action="store", dest="days_ago", type=int,
 parser.add_argument('repository_name',  action="store", help='ECR repository name')
 args = parser.parse_args()
 
-delta = datetime.timedelta(days=args.days_ago)
-until_datetime = datetime.datetime.now() - delta
+if args.days_ago:
+    delta = datetime.timedelta(days=args.days_ago)
+    until_datetime = datetime.datetime.now() - delta
 
 
-if args.aws_profile:
-    session = boto3.Session(profile_name=args.aws_profile)
+    if args.aws_profile:
+        session = boto3.Session(profile_name=args.aws_profile)
+    else:
+        session = boto3.Session()
+    client = session.client('ecr', region_name=args.aws_region)
+
+    images = client.describe_images(repositoryName=args.repository_name, maxResults=1000)['imageDetails']
+    todelete = []
+
+    for i in images:
+        if until_datetime > i['imagePushedAt'].replace(tzinfo=None):
+            todelete.append( {'imageDigest':i['imageDigest']} )
+
+    print(str(len(todelete)) + ' images will be deleted.')
+    if len(todelete) == 0:
+        sys.exit(0)
+    print('[Yes/No] ?')
+    gg = input()
+
+    if gg.lower() in ('yes', 'y'):
+        response = client.batch_delete_image(repositoryName=args.repository_name, imageIds=todelete)
+        print('Deleted: ' + str( len(response['imageIds']) ) + ' images')
+        print('Failures:' + str( len(response['failures']) ))
+    else:
+        sys.exit(0)
 else:
-    session = boto3.Session()
-client = session.client('ecr', region_name=args.aws_region)
-
-images = client.describe_images(repositoryName=args.repository_name, maxResults=1000)['imageDetails']
-todelete = []
-
-for i in images:
-    if until_datetime > i['imagePushedAt'].replace(tzinfo=None):
-        todelete.append( {'imageDigest':i['imageDigest']} )
-
-print(str(len(todelete)) + ' images will be deleted.')
-if len(todelete) == 0:
-    sys.exit(0)
-print('[Yes/No] ?')
-gg = input()
-
-if gg.lower() in ('yes', 'y'):
-    response = client.batch_delete_image(repositoryName=args.repository_name, imageIds=todelete)
-    print('Deleted: ' + str( len(response['imageIds']) ) + ' images')
-    print('Failures:' + str( len(response['failures']) ))
-else:
-    sys.exit(0)
+    print(parser.parse_args(['-h']))
