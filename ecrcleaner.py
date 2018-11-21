@@ -7,7 +7,7 @@ parser.add_argument('-p', '--profile', action="store", dest="aws_profile", help=
 parser.add_argument('-r', '--region', action="store", dest="aws_region", help='EC2 region name. Using "default" for your profile if not set')
 parser.add_argument('-d', '--delete', action="store", dest="days_ago", type=int, help='Delete images that are older then "days_ago')
 parser.add_argument('repository_name',  action="store", help='ECR repository name')
-
+args = parser.parse_args()
 
 delta = datetime.timedelta(days=args.days_ago)
 until_datetime = datetime.datetime.now() - delta
