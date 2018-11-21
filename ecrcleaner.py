@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import boto3, argparse, datetime, yaml, sys
+from operator import itemgetter
 
 parser = argparse.ArgumentParser(description='AWS Amazon EC2 Container Registry cleaner')
 
@@ -57,7 +58,7 @@ if args.list_repo:
     sys.exit(0)
 
 if args.list_allrepo:
-    allrepos = client.describe_repositories(maxResults=1000)['repositories']
+    allrepos = sorted(client.describe_repositories(maxResults=1000)['repositories'], key=itemgetter('repositoryName') )
     for i in allrepos:
         amount = len(client.describe_images(repositoryName=i['repositoryName'], maxResults=1000)['imageDetails'])
         print(str (str(amount) + ' / 1000 ').ljust(14) + i['repositoryName'])
