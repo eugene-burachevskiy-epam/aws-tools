@@ -23,7 +23,7 @@ images = client.describe_images(repositoryName=args.repository_name, maxResults=
 todelete = []
 
 for i in images:
-    if untildate > i['imagePushedAt'].replace(tzinfo=None):
+    if until_datetime > i['imagePushedAt'].replace(tzinfo=None):
         todelete.append(i['imageDigest'])
 
 print(str(len(todelete)) + ' images will be deleted.')
