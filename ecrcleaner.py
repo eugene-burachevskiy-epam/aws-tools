@@ -60,7 +60,7 @@ if args.list_allrepo:
     allrepos = client.describe_repositories(maxResults=1000)['repositories']
     for i in allrepos:
         amount = len(client.describe_images(repositoryName=i['repositoryName'], maxResults=1000)['imageDetails'])
-        print(str(amount) + ' / 1000 ' + i['repositoryName'])
+        print(str (str(amount) + ' / 1000 ').ljust(14) + i['repositoryName'])
     sys.exit(0)
 
 print(parser.parse_args(['-h']))
