@@ -10,6 +10,7 @@ group.add_argument('-l', '--list', action="store_true", dest="list_repo", defaul
 group.add_argument('--list-all', action="store_true", dest="list_allrepo", default=False, help='Show repository info')
 group.add_argument('-d', '--delete', action="store", dest="days_ago", type=int, help='Delete images that are older then "DAYS_AGO"')
 
+parser.add_argument('--only', action="store", dest="del_tag", help='Image tag string. Use with --delete')
 parser.add_argument('-p', '--profile', action="store", dest="aws_profile", help='.aws/credentials profile name. Using "default" if not set')
 parser.add_argument('-r', '--region', action="store", dest="aws_region", help='AWS region name. Using "default" for your profile if not set')
 parser.add_argument('repository_name',  action="store", nargs='?', help='ECR repository name')
@@ -33,7 +34,12 @@ if args.days_ago:
 
     for i in images:
         if until_datetime > i['imagePushedAt'].replace(tzinfo=None):
-            todelete.append( {'imageDigest':i['imageDigest']} )
+            if del_tag:
+                for tag in i['imageTags']:
+                    if del_tag in tag:
+                        todelete.append( {'imageDigest':i['imageDigest']} )
+            else:
+                todelete.append( {'imageDigest':i['imageDigest']} )
 
     print(str(len(todelete)) + ' images will be deleted.')
     if len(todelete) == 0:
