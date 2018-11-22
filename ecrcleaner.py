@@ -66,7 +66,7 @@ if args.list_repo:
     print(str(amount) + ' / 1000 images \n')
     print('Last pushed images:')
     for i in last10:
-        print(i['imagePushedAt'].replace(tzinfo=None).strftime(fmt).ljust(20) + str(i.get('imageTags', 'notags'))
+        print(i['imagePushedAt'].replace(tzinfo=None).strftime(fmt).ljust(20) + str(i.get('imageTags', 'notags')) )
     sys.exit(0)
 
 if args.list_allrepo:
