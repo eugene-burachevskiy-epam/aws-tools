@@ -31,6 +31,35 @@ Example:
 
 ----------
 
+scrcleaner.py - explore and clean your EC2 Container Registry (ECR)
+
+Example:
+
+    root@vbox:/opt/mygithub# ./ecrcleaner.py -l esl-back
+    66**********.dkr.ecr.us-east-1.amazonaws.com/esl-back
+
+    43 / 1000 images
+    
+    Last pushed images:
+    2018-11-21 14:56:33 ['19.1-d434']
+    2018-11-21 13:10:30 ['19.1-d433']
+    2018-11-21 05:40:42 notags
+    2018-11-21 00:29:58 ['19.1-d432']
+    2018-11-20 21:13:40 ['19.1-d431']
+    2018-11-20 04:12:14 ['19.1-d430']
+    2018-11-19 23:01:28 ['19.1-d429']
+    2018-11-19 19:21:17 ['19.1-d428']
+    2018-11-19 13:12:29 ['19.1-d427']
+    root@vbox:/opt/mygithub# ./ecrcleaner.py -d 3 esl-back
+    34 images will be deleted.
+    [Yes/No] ?
+    no
+    root@vbox:/opt/mygithub#
+
+    
+
+----------
+
 
 amilist.py - AMI listing
 
