@@ -35,7 +35,7 @@ if args.days_ago:
     for i in images:
         if until_datetime > i['imagePushedAt'].replace(tzinfo=None):
             if args.del_tag:
-                for tag in i['imageTags']:
+                for tag in i.get('imageTags', 'notags'):
                     if args.del_tag in tag:
                         todelete.append( {'imageDigest':i['imageDigest']} )
             else:
@@ -66,7 +66,7 @@ if args.list_repo:
     print(str(amount) + ' / 1000 images \n')
     print('Last pushed images:')
     for i in last10:
-        print(i['imagePushedAt'].replace(tzinfo=None).strftime(fmt).ljust(20) + str(i['imageTags']))
+        print(i['imagePushedAt'].replace(tzinfo=None).strftime(fmt).ljust(20) + str(i.get('imageTags', 'notags'))
     sys.exit(0)
 
 if args.list_allrepo:
