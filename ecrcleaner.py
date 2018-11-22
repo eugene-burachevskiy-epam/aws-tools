@@ -56,11 +56,11 @@ if args.list_repo:
     amount = len(images)
     uri = client.describe_repositories(repositoryNames=[args.repository_name])['repositories'][0]['repositoryUri']
     last10 = sorted(images, key=itemgetter('imagePushedAt'), reverse=True)[0:9]
-    print(uri)
+    print(uri + '\n')
     print(str(amount) + ' / 1000 images \n')
     print('Last pushed images:')
     for i in last10:
-        print(i['imagePushedAt'].replace(tzinfo=None).strftime(fmt).ljust(20) + i['imageTags'])
+        print(i['imagePushedAt'].replace(tzinfo=None).strftime(fmt).ljust(20) + str(i['imageTags']))
     sys.exit(0)
 
 if args.list_allrepo:
