@@ -15,6 +15,7 @@ parser.add_argument('-r', '--region', action="store", dest="aws_region", help='A
 parser.add_argument('repository_name',  action="store", nargs='?', help='ECR repository name')
 args = parser.parse_args()
 
+fmt = '%Y-%m-%d %H:%M:%S'
 
 if args.aws_profile:
     session = boto3.Session(profile_name=args.aws_profile)
@@ -51,10 +52,15 @@ if args.days_ago:
 
 
 if args.list_repo:
-    amount = len(client.describe_images(repositoryName=args.repository_name, maxResults=1000)['imageDetails'])
+    images = client.describe_images(repositoryName=args.repository_name, maxResults=1000)['imageDetails']
+    amount = len(images)
     uri = client.describe_repositories(repositoryNames=[args.repository_name])['repositories'][0]['repositoryUri']
+    last10 = sorted(images, key=itemgetter('imagePushedAt'), reverse=True)[0:9]
     print(uri)
-    print(str(amount) + ' / 1000 images')
+    print(str(amount) + ' / 1000 images \n')
+    print('Last pushed images:')
+    for i in last10:
+        print(i['imagePushedAt'].replace(tzinfo=None).strftime(fmt).ljust(20) + i['imageTags'])
     sys.exit(0)
 
 if args.list_allrepo:
