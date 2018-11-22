@@ -25,7 +25,7 @@ else:
 client = session.client('ecr', region_name=args.aws_region)
 
 
-if args.days_ago:
+if args.days_ago or (args.days_ago == 0):
     delta = datetime.timedelta(days=args.days_ago)
     until_datetime = datetime.datetime.now() - delta
 
