@@ -55,8 +55,12 @@ if args.days_ago or (args.days_ago == 0):
             for tag in i.get('imageTags', 'notags'):
                 for exclude_tag in excludelist:
                     if exclude_tag in tag:
-                        todelete.remove(i['imageDigest'])
-                        excludecounter += 1
+                        try:
+                            todelete.remove(i['imageDigest'])
+                            excludecounter += 1
+                        except:
+                            pass
+                        
     
     #Converting digest list to the list of dictionaries
     for digest in todelete:
@@ -64,6 +68,8 @@ if args.days_ago or (args.days_ago == 0):
     
 
     print(str(len(todelete)) + ' images will be deleted.')
+    if args.exclude_file:
+        print(str(excludecounter) + ' images excluded')
     if len(todelete) == 0:
         sys.exit(0)
     print('[Yes/No] ?')
