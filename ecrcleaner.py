@@ -3,7 +3,7 @@
 import boto3, argparse, datetime, yaml, sys
 from operator import itemgetter
 
-parser = argparse.ArgumentParser(description='AWS Amazon EC2 Container Registry cleaner')
+parser = argparse.ArgumentParser(description='AWS EC2 Container Registry cleaner')
 
 group = parser.add_mutually_exclusive_group()
 group.add_argument('-l', '--list', action="store_true", dest="list_repo", default=False, help='Show repository info')
@@ -11,6 +11,7 @@ group.add_argument('--list-all', action="store_true", dest="list_allrepo", defau
 group.add_argument('-d', '--delete', action="store", dest="days_ago", type=int, help='Delete images that are older then "DAYS_AGO"')
 
 parser.add_argument('--only', action="store", dest="del_tag", help='Delete only with such tag. Use with -d')
+parser.add_argument('--exclude', action="store", dest="exclude_file", help='Path to file with YAML list of tags which should NOT be deleted. Use with -d')
 parser.add_argument('-p', '--profile', action="store", dest="aws_profile", help='.aws/credentials profile name. Using "default" if not set')
 parser.add_argument('-r', '--region', action="store", dest="aws_region", help='AWS region name. Using "default" for your profile if not set')
 parser.add_argument('repository_name',  action="store", nargs='?', help='ECR repository name')
@@ -34,12 +35,33 @@ if args.days_ago or (args.days_ago == 0):
 
     for i in images:
         if until_datetime > i['imagePushedAt'].replace(tzinfo=None):
+            #if --only option active
             if args.del_tag:
                 for tag in i.get('imageTags', 'notags'):
                     if args.del_tag in tag:
-                        todelete.append( {'imageDigest':i['imageDigest']} )
+                        todelete.append( i['imageDigest'] )
             else:
-                todelete.append( {'imageDigest':i['imageDigest']} )
+                todelete.append( i['imageDigest'] ) #{'imageDigest':i['imageDigest']}
+    
+    #If --exclude option active
+    if args.exclude:
+        try:
+            excludelist = yaml.load(open(args.exclude, 'r'))
+        except:
+            print('Could not open exclude list file!')
+            sys.exit(1)
+        excludecounter = 0
+        for i in images:
+            for tag in i.get('imageTags', 'notags'):
+                for exclude_tag in excludelist:
+                    if exclude_tag in tag:
+                        todelete.remove(i['imageDigest'])
+                        excludecounter += 1
+    
+    #Converting digest list to the list of dictionaries
+    for digest in todelete:
+        todelete[todelete.index(digest)] = {'imageDigest':digest}
+    
 
     print(str(len(todelete)) + ' images will be deleted.')
     if len(todelete) == 0:
