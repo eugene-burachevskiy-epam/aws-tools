@@ -57,9 +57,9 @@ if args.days_ago or (args.days_ago == 0):
                 for exclude_tag in excludelist:
                     if exclude_tag in tag:
                         excludecounter_list.append(i)
+                        excludecounter += 1
                         try:
                             todelete.remove(i['imageDigest'])
-                            excludecounter += 1
                         except:
                             pass
                         
