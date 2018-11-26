@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import boto3, argparse, datetime, yaml, sys
+import boto3, argparse, datetime, yaml, pprint, sys
 from operator import itemgetter
 
 parser = argparse.ArgumentParser(description='AWS EC2 Container Registry cleaner')
@@ -72,7 +72,7 @@ if args.days_ago or (args.days_ago == 0):
     print(str(len(todelete)) + ' images will be deleted.')
     if args.exclude_file:
         print(str(excludecounter) + ' images excluded:')
-        print(excludecounter_list)
+        pprint.pprint(excludecounter_list)
     if len(todelete) == 0:
         sys.exit(0)
     print('[Yes/No] ?')
