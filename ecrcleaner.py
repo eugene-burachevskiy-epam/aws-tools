@@ -51,10 +51,12 @@ if args.days_ago or (args.days_ago == 0):
             print('Could not open exclude list file!')
             sys.exit(1)
         excludecounter = 0
+        excludecounter_list = []
         for i in images:
             for tag in i.get('imageTags', 'notags'):
                 for exclude_tag in excludelist:
                     if exclude_tag in tag:
+                        excludecounter_list.append(tag)
                         try:
                             todelete.remove(i['imageDigest'])
                             excludecounter += 1
@@ -69,7 +71,8 @@ if args.days_ago or (args.days_ago == 0):
 
     print(str(len(todelete)) + ' images will be deleted.')
     if args.exclude_file:
-        print(str(excludecounter) + ' images excluded')
+        print(str(excludecounter) + ' images excluded:')
+        print(excludecounter_list)
     if len(todelete) == 0:
         sys.exit(0)
     print('[Yes/No] ?')
