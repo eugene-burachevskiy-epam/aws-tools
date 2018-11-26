@@ -44,9 +44,9 @@ if args.days_ago or (args.days_ago == 0):
                 todelete.append( i['imageDigest'] ) #{'imageDigest':i['imageDigest']}
     
     #If --exclude option active
-    if args.exclude:
+    if args.exclude_file:
         try:
-            excludelist = yaml.load(open(args.exclude, 'r'))
+            excludelist = yaml.load(open(args.exclude_file, 'r'))
         except:
             print('Could not open exclude list file!')
             sys.exit(1)
