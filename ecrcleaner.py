@@ -12,6 +12,7 @@ group.add_argument('-d', '--delete', action="store", dest="days_ago", type=int, 
 
 parser.add_argument('--only', action="store", dest="del_tag", help='Delete only with such tag. Use with -d')
 parser.add_argument('--exclude', action="store", dest="exclude_file", help='Path to file with YAML list of tags which should NOT be deleted. Use with -d')
+parser.add_argument('--force', action="store_true", dest="force_delete", default=False, help='Delete without confirmation. Use CAREFUL, for automation!')
 parser.add_argument('-p', '--profile', action="store", dest="aws_profile", help='.aws/credentials profile name. Using "default" if not set')
 parser.add_argument('-r', '--region', action="store", dest="aws_region", help='AWS region name. Using "default" for your profile if not set')
 parser.add_argument('repository_name',  action="store", nargs='?', help='ECR repository name')
@@ -75,8 +76,12 @@ if args.days_ago or (args.days_ago == 0):
         pprint.pprint(excludecounter_list)
     if len(todelete) == 0:
         sys.exit(0)
-    print('[Yes/No] ?')
-    gg = input()
+        
+    if args.force_delete:
+        gg = 'yes'
+    else:
+        print('[Yes/No] ?')
+        gg = input()
 
     if gg.lower() in ('yes', 'y'):
         chunks = [todelete[x:x+100] for x in range(0, len(todelete), 100)]
