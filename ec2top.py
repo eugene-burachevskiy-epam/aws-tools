@@ -51,6 +51,8 @@ def vpc_name(id):
         vpcdata = ec2.describe_vpcs()
         for vpci in vpcdata['Vpcs']:
             if vpci['VpcId'] == id:
+                if 'Tags' not in vpci.keys():
+                    vpci['Tags'] = [{'Value': 'NoNameAssigned', 'Key': 'Name'}]
                 vpcname = instance_name(vpci['Tags'])
                 if vpcname:
                     vpcname = vpcname.replace(' ', '_')
